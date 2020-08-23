@@ -353,7 +353,7 @@ Usualy the purpose of a user-defined function is to process the input parameters
 - Internal functions
 - C-language functions
 
-**Example of function in PL/pgSQL
+**Example of function in PL/pgSQL**
 
 ```SQL
 CREATE OR REPLACE FUNCTION increment(i INT) RETURNS INT AS $$
@@ -365,8 +365,97 @@ $$ LANGUAGE plpgsql;
 SELECT increment(10);
 ```
 
+**Example of stored proc in PL/pgSQL**
 
 
+```SQL
+CREATE OR REPLACE FUNCTION add_city(city VARCHAR(70), state CHAR(2))
+RETURNS void AS $$
+BEGIN
+INSERT INTO cities VALUES (city, state);
+END;
+$$ LANGUAGE plpgsql;
+-- An example how to use the function:
+SELECT add_city('St.Louis', 'MO');
+```
+
+**Another example with multiple output params**
+
+```SQL
+CREATE FUNCTION dup(in int, out f1 int, out f2 text)
+AS $$ SELECT $1, CAST($1 AS text) || ' is text' $$
+LANGUAGE SQL;
+SELECT * FROM dup(42);
+```
+
+**Same example with TABLE function**
+
+```SQL
+CREATE FUNCTION dup(int) RETURNS TABLE(f1 int, f2 text)
+AS $$ SELECT $1, CAST($1 AS text) || ' is text' $$
+LANGUAGE SQL;
+SELECT * FROM dup(42);
+```
+
+### Triggers
+
+**What?**
+
+A trigger is associated with specified table, view or foreign table and will execute the specified *function_name* when certain events occur.
+
+Can fire:
+
+- before operation is attempted on a row
+- after the operation is completed
+- instead of the operation
+
+If the trigger fires before or instead of the event, the trigger can skip the operation for the current row or change the row being inserted (for INSERT and UPDATE operations only).
+
+A trigger that is marked FOR EACH ROW is called once for every row that the operation modifies.
+
+Also, a trigger definition can specify a boolean WHEN condition, which will be tested to see whether the trigger should be fired.
+
+In row-level triggers the WHEN condition can examine the old and/or new values of columns of the row.
+
+Statement level triggers can also have WHEN conditions, although the feature is not so useful for them since the condition cannot refer to any values in the table.
+
+**Two types of triggers**
+
+- FOR EACH ROW
+- FOR EACH STATEMENT
+
+This specifies whether the trigger procedure should be fired once for every row affected by the trigger event, or just once per SQL statement.
+
+If neither is specified, FOR EACH STATEMENT is default.
+
+Constraint triggers can only be specified FOR EACH ROW
+
+**Trigger examples:**
+
+
+```SQL
+CREATE TRIGGER check_update
+BEFORE UPDATE ON accounts
+FOR EACH ROW
+EXECUTE PROCEDURE check_account_update();
+
+CREATE TRIGGER check_update
+BEFORE UPDATE OF balance ON accounts
+FOR EACH ROW
+EXECUTE PROCEDURE check_account_update();
+
+CREATE TRIGGER check_update
+BEFORE UPDATE ON accounts
+FOR EACH ROW
+WHEN (OLD.balance IS DISTINCT FROM NEW.balance)
+EXECUTE PROCEDURE check_account_update();
+
+CREATE TRIGGER log_update
+AFTER UPDATE ON accounts
+FOR EACH ROW
+WHEN (OLD.* IS DISTINCT FROM NEW.*)
+EXECUTE PROCEDURE log_account_update();
+```
 
 
 
