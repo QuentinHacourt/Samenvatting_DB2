@@ -312,6 +312,65 @@ echo "Call to pg_get_result(): $res\n";
 ?>
 ```
 
+## Week 6: Stored Procedures, Functions, Triggers
+
+### Stored Procedures - Functions
+
+Both are a set of SQL and procedural statements
+
+- Set of SQL and procedural statements:
+    - Declarations
+    - Assignments
+    - Loops
+    - Flow control
+    - ...
+- Stored on DBMS
+- Created using "CREATE FUNCTION" syntax
+- Overloading is possible (different input params, same name)
+
+Differences:
+
+|                                 | Stored Procedure | Function                  |
+|---------------------------------|-----------------:|---------------------------|
+| Use in an expression            | x                | yes                       |
+| Return a value                  | x                | Yes                       |
+| Return values as OUT parameters | Yes              | x                         |
+| Return a single result set      | Yes              | Yes (as a table function) |
+| Return multiple result sets     | Yes              | x                         |
+
+So in most cases, the purpose of a stored procedure is to:
+
+- Perform actions without returning any result (INSERT, UPDATE operations i.e.)
+- Return one or more scalar values as OUT parameters
+- Return one or more result sets
+
+Usualy the purpose of a user-defined function is to process the input parameters and return a new value.
+
+**PostgreSQL: 4 kinds of functions**
+
+- Query language functions
+- Procedural language functions (functions written in, for example, PL/pgSQL or PL/Tcl)
+- Internal functions
+- C-language functions
+
+**Example of function in PL/pgSQL
+
+```SQL
+CREATE OR REPLACE FUNCTION increment(i INT) RETURNS INT AS $$
+BEGIN
+RETURN i + 1;
+END;
+$$ LANGUAGE plpgsql;
+-- An example how to use the function:
+SELECT increment(10);
+```
+
+
+
+
+
+
+
 TODO: Hoofdstuk 6-9:
 
 ```SQL
