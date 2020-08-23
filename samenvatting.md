@@ -457,10 +457,81 @@ WHEN (OLD.* IS DISTINCT FROM NEW.*)
 EXECUTE PROCEDURE log_account_update();
 ```
 
+## Week 7: RDBMS-ORDBMS-OODBMS
 
+TODO: this flippin' chapter
 
+## Week 8: Exotische datatypes
 
-TODO: Hoofdstuk 6-9:
+### XML
+
+eXtensible Markup Language (cringe)
+
+XML is de meest cringe en vergezochte manier om data voor te stellen, JSON or GTFO.
+
+### JSON
+
+JSON is een veel minder cringe manier om data voor te stellen, in tegenstelling tot XML is json vlot om te schrijven en te lezen voor mensen.
+
+**Samenvatting**: gebruik gewoon json, de 90's zijn over boomers
+
+### Other Formats
+
+Even more exotic:
+
+- Geometric types
+- Network address types
+- Text search types
+- Composite types
+- Range types
+
+-> RDBMS reach out towards application domains with heavy database use
+
+## Week 9: import/export
+
+### When
+
+- To load data into your DBMS
+- IoT: To automatically stream data to your database
+    - Conversion
+    - Parsing
+    - Scripts
+    - Security ! Consistency !
+- Backup/Archive
+    - "Online/offline" storage
+    - To keep RDBMS at speed
+    - Offline readability <> readability by original application
+- Exchange to other programs
+    - RDBMS <> RDBMS:
+        - use SQL
+        - Direct links
+    - RDBMS > Applications
+        - XML
+        - JSON
+        - CSV
+        - ...
+    - Applications > RDBMS
+        - Limited (relationships)
+
+### Export
+
+Possibilities/points of attention
+
+- Copy/paste through pgadmin into Excel (<- cringe microsoft software)
+- Backup functionality
+- Character sets
+- ...
+
+### Import
+
+Possibilities
+
+- CSV
+- SQL
+- XML
+- JSON
+- ...
+
 
 ```SQL
 
